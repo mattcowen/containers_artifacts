@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-java
+spec:
+  selector:
+    matchLabels:
+      app: user-java
+  template:
+    metadata:
+      labels:
+        app: user-java
+    spec:
+      containers:
+      - name: user-java
+        image: registrykur4956.azurecr.io/user-java:1.0
+        env:
+        - name: SQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: sql
+              key: user
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sql
+              key: password
+        - name: SQL_SERVER
+          value: "sqlserverkur4956.database.windows.net"
+        resources:
+          requests: # minimum resources required
+            cpu: 500m
+            memory: 1G
+          limits: # maximum resources allocated
+            cpu: 1000m
+            memory: 2G

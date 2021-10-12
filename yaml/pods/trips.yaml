@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trips
+spec:
+  selector:
+    matchLabels:
+      app: trips
+  template:
+    metadata:
+      labels:
+        app: trips
+    spec:
+      containers:
+      - name: trips
+        image: registrykur4956.azurecr.io/trips:1.0
+        env:
+        - name: SQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: sql
+              key: user
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sql
+              key: password
+        - name: SQL_SERVER
+          value: "sqlserverkur4956.database.windows.net"
+        resources:
+          requests: # minimum resources required
+            cpu: 500m
+            memory: 1G
+          limits: # maximum resources allocated
+            cpu: 1000m
+            memory: 2G
+        #readinessProbe: # is the container ready to receive traffic?
+        #  httpGet:
+        #    port: 3000
+        #    path: /healthz
+        #livenessProbe: # is the container healthy?
+        #  httpGet:
+        #    port: 3000
+        #    path: /healthz
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trips
+spec:
+  selector:
+    app: trips
+  ports:
+  - protocol: TCP
+    port: 80
+  type: ClusterIP # No external IP required

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tripviewer
+spec:
+  selector:
+    matchLabels:
+      app: tripviewer
+  template:
+    metadata:
+      labels:
+        app: tripviewer
+    spec:
+      containers:
+      - name: tripviewer
+        image: registrykur4956.azurecr.io/tripviewer:1.0
+        env:
+        - name: USERPROFILE_API_ENDPOINT
+          value: "http://userprofile.default.svc.cluster.local"
+        - name: TRIPS_API_ENDPOINT
+          value: "http://trips.default.svc.cluster.local"
+        - name: BING_MAPS_KEY
+          value: ""
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tripviewer
+spec:
+  selector:
+    app: tripviewer
+  ports:
+  - protocol: TCP
+    port: 80
+  type: LoadBalancer

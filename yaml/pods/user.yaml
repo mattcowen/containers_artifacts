@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userprofile
+spec:
+  selector:
+    matchLabels:
+      app: userprofile
+  template:
+    metadata:
+      labels:
+        app: userprofile
+    spec:
+      containers:
+      - name: userprofile
+        image: registrykur4956.azurecr.io/userprofile:1.0
+        env:
+        - name: SQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: sql
+              key: user
+        - name: SQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sql
+              key: password
+        - name: SQL_SERVER
+          value: "sqlserverkur4956.database.windows.net"
+        resources:
+          requests: # minimum resources required
+            cpu: 500m
+            memory: 1G
+          limits: # maximum resources allocated
+            cpu: 1000m
+            memory: 2G
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userprofile
+spec:
+  selector:
+    app: userprofile
+  ports:
+  - protocol: TCP
+    port: 80
+  type: ClusterIP # No external IP required
