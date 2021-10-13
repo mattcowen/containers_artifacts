@@ -15,16 +15,6 @@ spec:
       - name: trips
         image: registrykur4956.azurecr.io/trips:1.0
         env:
-        - name: SQL_USER
-          valueFrom:
-            secretKeyRef:
-              name: sql
-              key: user
-        - name: SQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: sql
-              key: password
         - name: SQL_SERVER
           value: "sqlserverkur4956.database.windows.net"
         resources:
@@ -34,6 +24,17 @@ spec:
           limits: # maximum resources allocated
             cpu: 1000m
             memory: 2G
+        volumeMounts:
+        - name: tripskeyvault
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+      volumes:
+        - name: tripskeyvault
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "tripskeyvault"
         #readinessProbe: # is the container ready to receive traffic?
         #  httpGet:
         #    port: 3000
