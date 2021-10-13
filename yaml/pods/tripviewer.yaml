@@ -16,11 +16,14 @@ spec:
         image: registrykur4956.azurecr.io/tripviewer:1.0
         env:
         - name: USERPROFILE_API_ENDPOINT
-          value: "http://userprofile.default.svc.cluster.local"
+          value: "http://userprofile.api.svc.cluster.local"
         - name: TRIPS_API_ENDPOINT
-          value: "http://trips.default.svc.cluster.local"
+          value: "http://trips.api.svc.cluster.local"
         - name: BING_MAPS_KEY
-          value: ""
+          valueFrom:
+            secretKeyRef:
+              name: maps
+              key: mapskey
 
 ---
 apiVersion: v1
