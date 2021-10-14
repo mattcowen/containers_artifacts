@@ -34,7 +34,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: "tripsKeyVault"
+              secretProviderClass: "tripskeyvault"
         #readinessProbe: # is the container ready to receive traffic?
         #  httpGet:
         #    port: 3000

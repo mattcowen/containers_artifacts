@@ -34,7 +34,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: "tripsKeyVault"
+              secretProviderClass: "tripskeyvault"
 ---
 apiVersion: v1
 kind: Service
