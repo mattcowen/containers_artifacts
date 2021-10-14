@@ -13,7 +13,8 @@ spec:
     spec:
       containers:
       - name: user-java
-        image: registrykur4956.azurecr.io/user-java:1.0
+        image: registrykur4956.azurecr.io/user-java:1.1
+        imagePullPolicy: Always
         env:
         - name: SQL_SERVER
           value: "sqlserverkur4956.database.windows.net"
@@ -22,11 +23,11 @@ spec:
             cpu: 500m
             memory: 1G
           limits: # maximum resources allocated
-            cpu: 1000m
+            cpu: 900m
             memory: 2G
         volumeMounts:
         - name: tripskeyvault
-          mountPath: "/mnt/secrets-store"
+          mountPath: "/secrets"
           readOnly: true
       volumes:
         - name: tripskeyvault
@@ -35,3 +36,15 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: "tripskeyvault"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-java
+spec:
+  selector:
+    app: user-java
+  ports:
+  - protocol: TCP
+    port: 80
+  type: ClusterIP # No external IP required

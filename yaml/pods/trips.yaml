@@ -26,7 +26,7 @@ spec:
             memory: 2G
         volumeMounts:
         - name: tripskeyvault
-          mountPath: "/mnt/secrets-store"
+          mountPath: "/secrets"
           readOnly: true
       volumes:
         - name: tripskeyvault
@@ -34,7 +34,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: "tripskeyvault"
+              secretProviderClass: "tripsKeyVault"
         #readinessProbe: # is the container ready to receive traffic?
         #  httpGet:
         #    port: 3000

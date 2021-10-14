@@ -28,7 +28,7 @@ spec:
             memory: 2G
         volumeMounts:
         - name: tripskeyvault
-          mountPath: "/mnt/secrets-store"
+          mountPath: "/secrets"
           readOnly: true
       volumes:
         - name: tripskeyvault
@@ -37,3 +37,15 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: "tripskeyvault"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: poi
+spec:
+  selector:
+    app: poi
+  ports:
+  - protocol: TCP
+    port: 80
+  type: ClusterIP # No external IP required
